@@ -60,10 +60,6 @@ object Api {
 
     var token = ""
 
-    @Provides
-    fun githubUserService(): GithubUserService = retrofit(BASE_URL).create(GithubUserService::class.java)
-    // add your services
-
     private fun retrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl).apply {
 
@@ -102,6 +98,14 @@ object Api {
 ```
 ### Service
 ```
+@Module
+@InstallIn(ApplicationComponent::class)
+object GithubUserApi {
+    @Singleton
+    @Provides
+    fun githubUserService(): GithubUserService = Api.retrofit(Api.BASE_URL).create(GithubUserService::class.java)
+}
+
 interface GithubUserService {
     @GET("users")
     fun getUsers(): Observable<List<GithubUser>>
